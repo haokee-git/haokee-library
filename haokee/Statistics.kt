@@ -82,7 +82,9 @@ class Statistics {
      */
     @JvmStatic
     fun <T : Number> mode(data: List<T>): List<Double> {
-      if (data.isEmpty()) return emptyList()
+      if (data.isEmpty()) {
+        return emptyList()
+      }
       val frequencyMap = data.groupingBy { it.toDouble() }.eachCount()
       val maxFrequency = frequencyMap.values.maxOrNull() ?: return emptyList()
       return frequencyMap.filter { it.value == maxFrequency }.keys.toList()
@@ -96,7 +98,9 @@ class Statistics {
      */
     @JvmStatic
     fun <T : Number> range(data: List<T>): Double {
-      if (data.isEmpty()) return Double.NaN
+      if (data.isEmpty()) {
+        return Double.NaN
+      }
       return data.maxOf { it.toDouble() } - data.minOf { it.toDouble() }
     }
 
@@ -108,7 +112,9 @@ class Statistics {
      */
     @JvmStatic
     fun <T : Number> quartiles(data: List<T>): Triple<Double, Double, Double> {
-      if (data.isEmpty()) return Triple(Double.NaN, Double.NaN, Double.NaN)
+      if (data.isEmpty()) {
+        return Triple(Double.NaN, Double.NaN, Double.NaN)
+      }
       val sortedList = data.map { it.toDouble() }.sorted()
       val q2 = median(sortedList)
       val q1 = median(sortedList.subList(0, sortedList.size / 2))
@@ -124,7 +130,9 @@ class Statistics {
      */
     @JvmStatic
     fun <T : Number> meanAbsoluteDeviation(data: List<T>): Double {
-      if (data.isEmpty()) return Double.NaN
+      if (data.isEmpty()) {
+        return Double.NaN
+      }
       val mean = mean(data)
       return data.map { kotlin.math.abs(it.toDouble() - mean) }.average()
     }
@@ -137,10 +145,16 @@ class Statistics {
      */
     @JvmStatic
     fun <T : Number> coefficientOfVariation(data: List<T>): Double {
-      if (data.isEmpty()) return Double.NaN
+      if (data.isEmpty()) {
+        return Double.NaN
+      }
       val mean = mean(data)
       val standardDeviation = standardDeviation(data)
-      return if (mean == 0.0) Double.NaN else (standardDeviation / mean) * 100
+      return if (mean == 0.0) {
+        Double.NaN
+      } else {
+        standardDeviation / mean * 100
+      }
     }
 
     /**
@@ -151,7 +165,9 @@ class Statistics {
      */
     @JvmStatic
     fun <T : Number> skewness(data: List<T>): Double {
-      if (data.isEmpty()) return Double.NaN
+      if (data.isEmpty()) {
+        return Double.NaN
+      }
       val mean = mean(data)
       val n = data.size
       val m3 = data.sumOf { (it.toDouble() - mean).pow(3) } / n
@@ -167,7 +183,9 @@ class Statistics {
      */
     @JvmStatic
     fun <T : Number> kurtosis(data: List<T>): Double {
-      if (data.isEmpty()) return Double.NaN
+      if (data.isEmpty()) {
+        return Double.NaN
+      }
       val mean = mean(data)
       val n = data.size
       val m4 = data.sumOf { (it.toDouble() - mean).pow(4) } / n

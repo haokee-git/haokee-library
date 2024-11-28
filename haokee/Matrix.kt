@@ -5,7 +5,7 @@ package haokee
  *
  * @param T 数字类型，必须是 Number 的子类。
  * @property row 矩阵的行数。
- * @property col 矩阵的列数。
+ * @property col 矩阵的列数
  */
 class Matrix<T : Number>(private val row: Int, private val col: Int) {
   private val a = Array(row) { Array<Number?>(col) { null } }
