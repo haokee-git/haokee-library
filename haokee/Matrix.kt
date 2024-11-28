@@ -86,9 +86,12 @@ class Matrix<T : Number>(private val row: Int, private val col: Int) {
    *
    * @param other 另一个矩阵。
    * @return 两个矩阵相加的结果。
+   * @throws IllegalArgumentException 如果矩阵的行数或列数不匹配。
    */
   operator fun plus(other: Matrix<T>): Matrix<T> {
-    assert(row == other.row && col == other.col)
+    if (row != other.row || col != other.col) {
+      throw IllegalArgumentException("Matrix size mismatch: $row x $col vs ${other.row} x ${other.col}")
+    }
     val result = Matrix<T>(row, col)
     for (i in 0..<row) {
       for (j in 0..<col) {
@@ -103,9 +106,12 @@ class Matrix<T : Number>(private val row: Int, private val col: Int) {
    *
    * @param other 另一个矩阵。
    * @return 两个矩阵相减的结果。
+   * @throws IllegalArgumentException 如果矩阵的行数或列数不匹配。
    */
   operator fun minus(other: Matrix<T>): Matrix<T> {
-    assert(row == other.row && col == other.col)
+    if (row != other.row || col != other.col) {
+      throw IllegalArgumentException("Matrix size mismatch: $row x $col vs ${other.row} x ${other.col}")
+    }
     val result = Matrix<T>(row, col)
     for (i in 0..<row) {
       for (j in 0..<col) {
@@ -120,9 +126,12 @@ class Matrix<T : Number>(private val row: Int, private val col: Int) {
    *
    * @param other 另一个矩阵。
    * @return 两个矩阵相乘的结果。
+   * @throws IllegalArgumentException 如果矩阵的列数与另一个矩阵的行数不匹配。
    */
   operator fun times(other: Matrix<T>): Matrix<T> {
-    assert(col == other.row)
+    if (col != other.row) {
+      throw IllegalArgumentException("Matrix size mismatch: $row x $col vs ${other.row} x ${other.col}")
+    }
     val result = Matrix<T>(row, other.col)
     for (i in 0..<row) {
       for (j in 0..<other.col) {
@@ -139,6 +148,22 @@ class Matrix<T : Number>(private val row: Int, private val col: Int) {
   }
 
   /**
+   * 矩阵数乘运算
+   *
+   * @param value 乘数
+   * @return 矩阵数乘的结果
+   */
+  operator fun times(value: Number?): Matrix<T> {
+    val result = Matrix<T>(row, col)
+    for (i in 0..<col) {
+      for (j in 0..<row) {
+        result[i, j] = Calculator.times(this[i, j]!!, value!!)
+      }
+    }
+    return result
+  }
+
+  /**
    * 矩阵取模运算。
    *
    * @param value 模值。
@@ -149,16 +174,6 @@ class Matrix<T : Number>(private val row: Int, private val col: Int) {
     for (i in 0..<row) {
       for (j in 0..<col) {
         result[i, j] = Calculator.rem(this[i, j]!!, value!!)
-      }
-    }
-    return result
-  }
-
-  operator fun times(value: Number?): Matrix<T> {
-    val result = Matrix<T>(row, col)
-    for (i in 0..<col) {
-      for (j in 0..<row) {
-        result[i, j] = Calculator.times(this[i, j]!!, value!!)
       }
     }
     return result
