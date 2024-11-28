@@ -77,5 +77,39 @@ class NumberTheory {
       }
       return result
     }
+
+    /**
+    * 计算 a 在模 m 下的逆元。
+    *
+    * @param a 要计算逆元的数。
+    * @param m 模数。
+    * @return a 在模 m 下的逆元，如果不存在则抛出异常。
+    * @throws IllegalArgumentException 如果逆元不存在。
+    */
+    @JvmStatic
+    fun modInverse(a: Long, m: Long): Long {
+      val (g, x, _) = extendedGcd(a, m)
+      if (g != 1L) {
+        throw IllegalArgumentException("Inverse does not exist")
+      }
+      return (x % m + m) % m
+    }
+
+    /**
+     * 扩展欧几里得算法。
+     *
+     * @param a 第一个数。
+     * @param b 第二个数。
+     * @return (g, x, y) 使得 g = gcd(a, b) 且 ax + by = g。
+     */
+    @JvmStatic
+    private fun extendedGcd(a: Long, b: Long): Triple<Long, Long, Long> {
+      if (b == 0L) {
+        return Triple(a, 1, 0)
+      }
+      val (g, x1, y1) = extendedGcd(b, a % b)
+      val y = x1 - (a / b) * y1
+      return Triple(g, y1, y)
+    }
   }
 }
